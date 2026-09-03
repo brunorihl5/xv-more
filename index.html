@@ -460,6 +460,19 @@ section{
 .btn-spotify:hover{box-shadow:0 16px 36px rgba(29,185,84,.45);}
 .btn-spotify svg{width:20px;height:20px;}
 
+/* Gift / alias section */
+.gift-card{background:radial-gradient(ellipse at top, rgba(231,201,166,.5), transparent 60%), linear-gradient(170deg,var(--paper),var(--cream-deep));border:1px solid var(--gold-light);border-radius:24px;padding:50px 28px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+.gift-icon{width:54px;height:54px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gold-light),var(--gold));color:#fff;font-size:25px;box-shadow:0 8px 20px rgba(124,90,46,.28);}
+.alias-box{margin:24px auto 18px;max-width:420px;background:rgba(255,255,255,.45);border:1px solid rgba(169,130,76,.4);border-radius:18px;padding:18px 20px;}
+.alias-label{font-family:'Tenor Sans',sans-serif;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:7px;}
+.alias-value{font-family:'Playfair Display',serif;font-size:clamp(24px,6vw,34px);color:var(--gold-deep);word-break:break-word;}
+.btn-copy{background:linear-gradient(120deg,var(--gold-light),var(--gold));color:#fff;border:none;}
+.alias-toast{min-height:20px;margin-top:12px;font-family:'Tenor Sans',sans-serif;font-size:11px;letter-spacing:.08em;color:var(--gold-deep);opacity:0;transform:translateY(5px);transition:opacity .3s ease, transform .3s ease;}
+.alias-toast.show{opacity:1;transform:translateY(0);}
+.dietary-box{margin-top:28px;padding-top:28px;border-top:1px solid rgba(169,130,76,.28);}
+.dietary-box p{font-size:18px;margin:0 0 20px;}
+.btn-dietary{background:var(--paper);color:var(--gold-deep);border:1px solid var(--gold);}
+
 /* music player floating */
 #music-player{
   position:fixed;bottom:22px;right:22px;z-index:200;
@@ -617,7 +630,7 @@ footer small{
       <div class="detail-card reveal delay2">
         <div class="detail-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke-width="1.6"/><path d="M12 7v5l3 2" stroke-width="1.6"/></svg></div>
         <div class="detail-eyebrow">Horario</div>
-        <p class="detail-main">21:30 a 5</p>
+        <p class="detail-main">21:30 a 5:30</p>
         <p class="detail-extra">No llegues tarde ♡</p>
       </div>
       <div class="detail-card copyable reveal delay3" id="locationCard">
@@ -660,6 +673,25 @@ footer small{
 
   <div class="section-divider">✦</div>
 
+  <!-- GIFT / ALIAS -->
+  <section id="gift-section">
+    <div class="hero-sparkle reveal">✦</div>
+    <h2 class="section-title reveal">Un regalito para More</h2>
+    <div class="section-sub reveal">si querés acompañarla de una forma especial</div>
+    <div class="gift-card reveal">
+      <div class="gift-icon">♡</div>
+      <p style="font-size:19px;margin:0 0 8px;">Tu presencia es lo más importante. Si además querés hacerle un regalo a Morena, podés hacerlo por transferencia.</p>
+      <div class="alias-box">
+        <div class="alias-label">Alias</div>
+        <div class="alias-value" id="aliasValue">silvamorenaa</div>
+      </div>
+      <button class="btn btn-copy" id="copyAliasBtn" type="button">Copiar alias</button>
+      <div class="alias-toast" id="aliasToast">¡Alias copiado! ✨</div>
+    </div>
+  </section>
+
+  <div class="section-divider">✦</div>
+
   <!-- RSVP -->
   <section id="rsvp-section">
     <div class="hero-sparkle reveal">✦</div>
@@ -672,6 +704,11 @@ footer small{
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.9.53 3.68 1.45 5.2L2 22l5.06-1.53a9.8 9.8 0 004.98 1.36h.01c5.46 0 9.91-4.45 9.91-9.91C21.96 6.46 17.5 2 12.04 2zm5.8 14a8.2 8.2 0 01-5.8 2.4 8.2 8.2 0 01-4.18-1.14l-.3-.18-2.82.85.85-2.74-.2-.3a8.16 8.16 0 01-1.26-4.4c0-4.55 3.71-8.26 8.27-8.26 4.55 0 8.26 3.71 8.26 8.26 0 2.27-.92 4.32-2.42 5.81-.13.13-.27.27-.4.4z"/></svg>
         Confirmar por WhatsApp
       </a>
+
+      <div class="dietary-box">
+        <p>¿Tenés alguna restricción alimenticia? 🍽️ Avisanos así podemos tenerlo en cuenta.</p>
+        <a href="https://wa.me/5491163077750?text=Hola%20More%21%20%F0%9F%92%95%20Tengo%20una%20restricci%C3%B3n%20alimenticia%20y%20quer%C3%ADa%20avisarte%3A%20" target="_blank" rel="noopener" class="btn btn-dietary">Avisar restricción alimenticia</a>
+      </div>
     </div>
   </section>
 
@@ -882,6 +919,18 @@ locationCard.addEventListener('click', ()=>{
   }
   copyToast.classList.add('show');
   setTimeout(()=>copyToast.classList.remove('show'), 1800);
+});
+
+/* ================= COPY ALIAS ================= */
+const copyAliasBtn = document.getElementById('copyAliasBtn');
+const aliasValue = document.getElementById('aliasValue');
+const aliasToast = document.getElementById('aliasToast');
+copyAliasBtn?.addEventListener('click', async ()=>{
+  const alias = aliasValue?.textContent?.trim() || 'silvamorenaa';
+  try{ await navigator.clipboard.writeText(alias); }
+  catch(e){ const temp=document.createElement('textarea'); temp.value=alias; document.body.appendChild(temp); temp.select(); document.execCommand('copy'); temp.remove(); }
+  aliasToast?.classList.add('show');
+  setTimeout(()=>aliasToast?.classList.remove('show'), 1800);
 });
 
 /* ================= RSVP BUTTON CONFETTI ================= */
